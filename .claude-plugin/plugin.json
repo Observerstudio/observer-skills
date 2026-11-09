@@ -1,15 +1,25 @@
 {
   "name": "observer-skills",
   "version": "1.0.0",
-  "description": "Observer studio's agent skills: coordinate a work track, brief lanes, review and gate PRs, write PR bodies, promote a release.",
-  "author": { "name": "Observer studio", "url": "https://github.com/Observerstudio" },
+  "description": "Observer studio's agent skills: coordinate a work track, brief lanes, review and gate PRs, write PR bodies, promote a release, untangle a codebase.",
+  "author": {
+    "name": "Observer studio",
+    "url": "https://github.com/Observerstudio"
+  },
   "repository": "https://github.com/Observerstudio/observer-skills",
-  "keywords": ["coordination", "code-review", "release", "skills"],
+  "keywords": [
+    "coordination",
+    "code-review",
+    "release",
+    "skills",
+    "refactoring"
+  ],
   "skills": [
     "./skills/coordinator",
     "./skills/writing-lane-briefs",
     "./skills/pr-review",
     "./skills/writing-pr-bodies",
-    "./skills/promoting-a-release"
+    "./skills/promoting-a-release",
+    "./skills/untangle-codebase"
   ]
 }

@@ -17,6 +17,13 @@
       "skills": [
         "promoting-a-release"
       ]
+    },
+    {
+      "title": "Untangle",
+      "description": "Untangle a codebase so agents read less per change and break less: one whole-repo pass (untangle-codebase). The area-by-area skill and the stay-untangled rules follow.",
+      "skills": [
+        "untangle-codebase"
+      ]
     }
   ]
 }
