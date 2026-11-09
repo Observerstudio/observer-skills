@@ -20,9 +20,10 @@
     },
     {
       "title": "Untangle",
-      "description": "Untangle a codebase so agents read less per change and break less: one whole-repo pass (untangle-codebase). The area-by-area skill and the stay-untangled rules follow.",
+      "description": "Untangle a codebase so agents read less per change and break less: one whole-repo pass (untangle-codebase), then one area at a time with a decision log, proof and a lock (untangle-area).",
       "skills": [
-        "untangle-codebase"
+        "untangle-codebase",
+        "untangle-area"
       ]
     }
   ]

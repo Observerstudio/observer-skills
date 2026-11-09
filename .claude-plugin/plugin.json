@@ -20,6 +20,7 @@
     "./skills/pr-review",
     "./skills/writing-pr-bodies",
     "./skills/promoting-a-release",
-    "./skills/untangle-codebase"
+    "./skills/untangle-codebase",
+    "./skills/untangle-area"
   ]
 }
