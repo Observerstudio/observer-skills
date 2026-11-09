@@ -1,8 +1,16 @@
 {
   "name": "observer",
-  "owner": { "name": "Observer studio", "url": "https://github.com/Observerstudio" },
+  "owner": {
+    "name": "Observer studio",
+    "url": "https://github.com/Observerstudio"
+  },
   "description": "Observer studio's agent skills, as an installable Claude Code plugin.",
   "plugins": [
-    { "name": "observer-skills", "source": "./", "description": "Coordinate a work track, brief lanes, review and gate PRs, write PR bodies, promote a release.", "category": "engineering" }
+    {
+      "name": "observer-skills",
+      "source": "./",
+      "description": "Coordinate a work track, brief lanes, review and gate PRs, write PR bodies, promote a release, untangle a codebase.",
+      "category": "engineering"
+    }
   ]
 }
