@@ -29,7 +29,7 @@ npx skills add Observerstudio/observer-skills --skill promoting-a-release -g -y 
 | [`pr-review`](skills/pr-review/SKILL.md) | Self-review before a PR (author mode), or gate a PR to MERGE or CHANGES (gate mode). A repo adopts it with [`review-standards-template.md`](skills/pr-review/review-standards-template.md). |
 | [`writing-pr-bodies`](skills/writing-pr-bodies/SKILL.md) | The PR body a lane hands back. Superseded by `pr` from mattpocock/skills; kept for briefs that still name it. |
 | [`promoting-a-release`](skills/promoting-a-release/SKILL.md) | Promote a branch rung or ship a hotfix, rehearsing each step on a copy first so no work is lost. A repo adopts it with [`promotion-template.md`](skills/promoting-a-release/promotion-template.md). |
-| [`untangle-codebase`](skills/untangle-codebase/SKILL.md) | Untangle a whole codebase in one pass so agents read less per change, break less without noticing, and debug faster. Typed by a person (`/untangle-codebase`), never auto-invoked. |
+| [`untangle-codebase`](skills/untangle-codebase/SKILL.md) | Untangle a whole codebase in one pass so agents read less per change, break less without noticing, and debug faster. Typed by a person (`/untangle-codebase`). Claude Code never auto-invokes it (`disable-model-invocation`); other agents are told in the skill to stop and ask unless a person named it. |
 
 The coordinator is used with [OCH — Observer Coordination Hub](https://github.com/Observerstudio/observer-coordination-hub), where claims, messages and knowledge live on a hub that feeds every session.
 
