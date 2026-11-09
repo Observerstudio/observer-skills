@@ -31,6 +31,8 @@ List these (with their exact descriptions) for the user and ask which ones to do
 
 Don't change anything yet.
 
+Focus: $ARGUMENTS. If an area or concern is named there, list its problems first, together with the code it imports and the code that imports it, and fix those before widening to the rest of the codebase. If it is empty, cover the whole codebase.
+
 Go through the codebase asking one thing: **should these pieces change together?** Write down every place the code gets the answer wrong, as in the [decision log example](#decision-log-example). There are only three ways to get it wrong.
 
 **Hidden links:** pieces that must change together, where the code doesn't show it.
@@ -99,7 +101,7 @@ You're done when:
 
 **Tips**
 
-- **Start from a skeleton:** script away the function bodies, so the whole codebase fits in context.
+- **Start from a skeleton:** script a copy with the function bodies stripped, so the whole codebase fits in context. Write it to a temporary directory, never over the working tree.
 - **Summarize with subagents:** have them summarize parts of the codebase, so you can reason across all of it at once.
 - **Check the dependency graph often:** script one that shows what imports what, and rerun it as you go.
 - **Enter where leverage is highest:** start looking there first.
