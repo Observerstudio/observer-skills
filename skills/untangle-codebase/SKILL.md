@@ -5,6 +5,8 @@ disable-model-invocation: true
 argument-hint: "[optional area or concern to focus on]"
 ---
 
+Run this only when a person asked for it by name. If you loaded it on your own, stop and ask first.
+
 Start a thorough refactor of this codebase and complete it to the end.
 
 Treat this as a goal.
@@ -79,7 +81,7 @@ If the user chose Comments:
 
 - Comments that restate the implementation, like `// sort first so the binary search works`, only change when it does, so they have no reason of their own to change. Remove them, even if they're phrased as a why.
 - Comments about something outside the code, like `// the proxy drops websockets, so we poll`, change when that does, and the code can't show it. Keep them.
-- Comments that explain a workaround om the codebase, like `// wait 100ms because the cache isn't ready yet`, only change when the problem behind the workaround does. They go when the redesign removes that problem.
+- Comments that explain a workaround in the codebase, like `// wait 100ms because the cache isn't ready yet`, only change when the problem behind the workaround does. They go when the redesign removes that problem.
 
 If the user chose Tests, do this last, because tests are your regression safety net. A test should fail on a regression, and only then:
 
