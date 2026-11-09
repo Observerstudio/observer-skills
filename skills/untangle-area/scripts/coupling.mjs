@@ -21,12 +21,12 @@ const { gitPath } = resolveSource(REPO, values.source)
 
 const raw = execFileSync(
   'git',
-  ['log', '--no-merges', '--numstat', '--format=--%h--%ad', '--date=short', '--', gitPath],
+  ['log', '--no-merges', '--no-renames', '--numstat', '--format=--%h--%ad', '--date=short', '--', gitPath],
   { cwd: REPO, maxBuffer: 1 << 30 },
 ).toString()
 
 const EXCLUDE = [
-  /\/generated\//,
+  /(^|\/)generated\//,
   /(^|\/)(package-lock\.json|pnpm-lock\.yaml|yarn\.lock|bun\.lockb)$/,
 ]
 
@@ -86,7 +86,7 @@ const markdown = []
 markdown.push(`# Temporal coupling — ${gitPath} full history`)
 markdown.push('')
 markdown.push(
-  `Command: \`git log --no-merges --numstat --format='--%h--%ad' --date=short -- ${gitPath}\` in \`${REPO}\` (HEAD @ ${head}).`,
+  `Command: \`git log --no-merges --no-renames --numstat --format='--%h--%ad' --date=short -- ${gitPath}\` in \`${REPO}\` (HEAD @ ${head}).`,
 )
 markdown.push('')
 markdown.push(`- commits parsed: ${commits.length}`)

@@ -32,6 +32,9 @@ export function resolveSource(root, source) {
       : root
   if (!existsSync(abs)) throw new Error(`source directory not found: ${abs}`)
   const rel = relative(root, abs).split(sep).join('/')
+  if (rel === '..' || rel.startsWith('../')) {
+    throw new Error(`source directory is outside --root: ${abs}`)
+  }
   return { abs, gitPath: rel === '' ? '.' : rel }
 }
 

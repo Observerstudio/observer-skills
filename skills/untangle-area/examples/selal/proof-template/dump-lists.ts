@@ -209,7 +209,7 @@ async function main() {
     [...DEPOSIT_PAID_REFERENCE_TYPES],
     [...DEPOSIT_RETURNED_REFERENCE_TYPES],
     [...chargeSettlement],
-    paymentFamilyGroups ? Object.keys(paymentFamilyGroups) : [],
+    paymentFamilyGroups ? pairs(paymentFamilyGroups).map(([key]) => key) : [],
     depositFamilySet ?? [],
     directDepositCharge ?? [],
     directDepositRefund ?? [],

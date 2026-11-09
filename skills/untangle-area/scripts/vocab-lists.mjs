@@ -26,6 +26,10 @@ mkdirSync(OUT, { recursive: true })
 const LABEL = values.label ?? basename(ROOT)
 const ONLY = values.only
 const MIN = Number(values.min ?? 8)
+if (!Number.isInteger(MIN) || MIN < 1) {
+  console.error(`--min must be a positive integer, got: ${values.min}`)
+  process.exit(2)
+}
 const { abs: SOURCE } = resolveSource(ROOT, values.source)
 const ts = loadTypeScript(ROOT, values.typescript)
 
@@ -33,10 +37,11 @@ const rel = (path) => relative(ROOT, path).split(sep).join('/')
 const SCREAM = /^[A-Z][A-Z0-9_]{2,}$/
 const textOf = (node) => (ts.isStringLiteral(node) || ts.isNoSubstitutionTemplateLiteral(node) ? node.text : undefined)
 
-const files = walkSource(SOURCE, /\.(ts|tsx)$/).filter((file) => {
+const files = walkSource(SOURCE, /\.(ts|tsx|mts|cts)$/).filter((file) => {
   const path = rel(file)
-  if (/\.(test|spec)\.tsx?$/.test(path) || /\.integration\.test\.tsx?$/.test(path)) return false
-  return !ONLY || path.startsWith(ONLY)
+  if (/\.(test|spec|integration\.test)\.(ts|tsx|mts|cts)$/.test(path)) return false
+  if (/(^|\/)__(tests|mocks)__\//.test(path)) return false
+  return !ONLY || path === ONLY || path.startsWith(ONLY.endsWith('/') ? ONLY : `${ONLY}/`)
 })
 
 const hits = []

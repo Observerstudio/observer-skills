@@ -48,13 +48,18 @@ node scripts/vocab-lists.mjs  --root /path/to/selal --out /path/to/selal/tmp/unt
 `enum` blocks in the Prisma schema; on another repo pass whichever enum schema
 it has, or omit it.
 
-If the target repo has no `node_modules` installed, point the AST scanners at
-another checkout's compiler rather than installing a dependency:
+If the target repo has no `node_modules` installed, point every AST scanner
+at another checkout's compiler rather than installing a dependency — set
+`TS_MODULE` once and all three AST scanners pick it up:
 
 ```bash
-TS_MODULE=/path/to/anywhere/node_modules/typescript \
-  node scripts/special-cases.mjs --root /path/to/selal --out /tmp/ua --schema prisma/schema.prisma
+export TS_MODULE=/path/to/anywhere/node_modules/typescript
+node scripts/special-cases.mjs --root /path/to/selal --out /tmp/ua --schema prisma/schema.prisma
+node scripts/import-graph.mjs  --root /path/to/selal --out /tmp/ua
+node scripts/vocab-lists.mjs   --root /path/to/selal --out /tmp/ua --min 8
 ```
+
+(`--typescript <module>` does the same per command.)
 
 ## The proof adapters
 
@@ -73,12 +78,19 @@ adapter, not as required code:
 
 Both take `--root <tree>` and `--area <src/server/services/<area>>`, read
 `DIFF_NOW`, and exit non-zero on zero rows. Copy them into the before and after
-trees, rewire the `@/` imports for the area being proved, then run:
+trees, rewire the `@/` imports for the area being proved, then run each adapter
+in **both** trees and compare both dumps:
 
 ```bash
-npx tsx proof-template/dump-lists.ts --root . --area src/server/services/return-log > lists.json
-DIFF_NOW=2026-11-09T12:00:00Z npx tsx proof-template/money-reads.ts --root . --area src/server/services/return-log > reads.json
-node proof-template/compare.js --before before/reads.json --after after/reads.json --out differences.json
+# in the before tree
+npx tsx proof-template/dump-lists.ts  --root . --area src/server/services/return-log > ../before/lists.json
+DIFF_NOW=2026-11-09T12:00:00Z npx tsx proof-template/money-reads.ts --root . --area src/server/services/return-log > ../before/reads.json
+# in the after tree
+npx tsx proof-template/dump-lists.ts  --root . --area src/server/services/return-log > ../after/lists.json
+DIFF_NOW=2026-11-09T12:00:00Z npx tsx proof-template/money-reads.ts --root . --area src/server/services/return-log > ../after/reads.json
+# compare the list dump and the read dump
+node proof-template/compare.js --before ../before/lists.json --after ../after/lists.json
+node proof-template/compare.js --before ../before/reads.json --after ../after/reads.json --out differences.json
 ```
 
 ## Money hold, in Selal terms

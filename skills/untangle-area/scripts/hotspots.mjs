@@ -25,13 +25,13 @@ const sixMonthsAgo = new Date()
 sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6)
 const SINCE = values.since ?? sixMonthsAgo.toISOString().slice(0, 10)
 const EXCLUDE = [
-  /\/generated\//,
+  /(^|\/)generated\//,
   /(^|\/)(package-lock\.json|pnpm-lock\.yaml|yarn\.lock|bun\.lockb)$/,
 ]
 
 const raw = execFileSync(
   'git',
-  ['log', '--no-merges', '--since', SINCE, '--numstat', '--format=--%h--%ad', '--date=short', '--', gitPath],
+  ['log', '--no-merges', '--no-renames', '--since', SINCE, '--numstat', '--format=--%h--%ad', '--date=short', '--', gitPath],
   { cwd: REPO, maxBuffer: 1 << 30 },
 ).toString()
 
@@ -57,7 +57,7 @@ for (const file of files) {
   } catch {
     continue
   }
-  const lines = text.split('\n').length - (text.endsWith('\n') ? 1 : 0)
+  const lines = text === '' ? 0 : text.split('\n').length - (text.endsWith('\n') ? 1 : 0)
   rows.push({
     file,
     rev: revisions.get(file),
@@ -92,7 +92,7 @@ const markdown = []
 markdown.push(`# Hotspots — revisions (since ${SINCE}) x current lines`)
 markdown.push('')
 markdown.push(
-  `Command: \`git log --no-merges --since ${SINCE} --numstat --format=--%h--%ad --date=short -- ${gitPath}\` then \`wc -l\` on each current file at ${head}.`,
+  `Command: \`git log --no-merges --no-renames --since ${SINCE} --numstat --format=--%h--%ad --date=short -- ${gitPath}\` then \`wc -l\` on each current file at ${head}.`,
 )
 markdown.push('')
 markdown.push(`- commits in window: ${commits}`)

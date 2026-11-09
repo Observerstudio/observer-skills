@@ -29,7 +29,9 @@ const ts = loadTypeScript(ROOT, values.typescript)
 
 const files = walkSource(SOURCE, /\.(ts|tsx|mts|cts)$/)
 const rel = (path) => relative(ROOT, path).split(sep).join('/')
-const isTest = (path) => /\.(test|spec|integration\.test)\.(ts|tsx)$/.test(path) || /\/__(tests|mocks)__\//.test(path)
+const isTest = (path) =>
+  /\.(test|spec|integration\.test)\.(ts|tsx|mts|cts)$/.test(path) ||
+  /(^|\/)__(tests|mocks)__\//.test(path)
 
 /** Area = the first two path segments under the source root. */
 function areaOf(file) {
@@ -88,7 +90,6 @@ const bump = (areaName, key) => {
       setTimeout: 0,
       sleep: 0,
       retryLoop: 0,
-      skippedTest: 0,
       enumList: 0,
     })
   }
@@ -98,8 +99,12 @@ const bump = (areaName, key) => {
 const enumLists = []
 const ifExamples = []
 const retryExamples = []
-const skipExamples = []
 const sleepExamples = []
+
+/** True when `node` contains a ThrowStatement anywhere (AST, not source text). */
+function throwsInside(node) {
+  return ts.isThrowStatement(node) || node.getChildren().some(throwsInside)
+}
 
 const isStringLike = (node) => ts.isStringLiteral(node) || ts.isNoSubstitutionTemplateLiteral(node)
 const textOf = (node) => (isStringLike(node) ? node.text : undefined)
@@ -153,7 +158,7 @@ for (const file of files) {
 
     if (ts.isCatchClause(node) && node.block) {
       const body = node.block.statements
-      const hasThrow = body.some((statement) => /\bthrow\b/.test(statement.getText()))
+      const hasThrow = body.some(throwsInside)
       if (!hasThrow) {
         bump(areaName, 'catchNoRethrow')
         if (
@@ -186,19 +191,6 @@ for (const file of files) {
         if (sleepExamples.length < 15) {
           sleepExamples.push(
             `${relPath}:${source.getLineAndCharacterOfPosition(node.getStart()).line + 1} ${name}(...)`,
-          )
-        }
-      }
-      if (
-        ts.isPropertyAccessExpression(callee) &&
-        ['skip', 'todo'].includes(callee.name.text) &&
-        ts.isIdentifier(callee.expression) &&
-        ['it', 'describe', 'test'].includes(callee.expression.text)
-      ) {
-        bump(areaName, 'skippedTest')
-        if (skipExamples.length < 15) {
-          skipExamples.push(
-            `${relPath}:${source.getLineAndCharacterOfPosition(node.getStart()).line + 1} ${callee.getText()}`,
           )
         }
       }

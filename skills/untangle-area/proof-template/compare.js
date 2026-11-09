@@ -9,19 +9,39 @@
 const fs = require('node:fs')
 const { parseArgs } = require('node:util')
 
-const { values } = parseArgs({
-  options: {
-    before: { type: 'string' },
-    after: { type: 'string' },
-    out: { type: 'string' },
-  },
-})
+const USAGE =
+  'usage: node compare.js --before <before.json> --after <after.json> [--out <differences.json>]'
+
+let values
+try {
+  values = parseArgs({
+    options: {
+      before: { type: 'string' },
+      after: { type: 'string' },
+      out: { type: 'string' },
+    },
+  }).values
+} catch (error) {
+  console.error(`${USAGE}\n${error.message}`)
+  process.exit(2)
+}
 
 if (!values.before || !values.after) {
-  console.error(
-    'usage: node compare.js --before <before.json> --after <after.json> [--out <differences.json>]',
-  )
+  console.error(USAGE)
   process.exit(2)
+}
+
+// JSON.parse rounds integers past 2^53, so two distinct dump values would look
+// equal. Check integer tokens (outside strings) before parsing and reject them.
+function rejectUnsafeIntegers(text, file) {
+  const unquoted = text.replace(/"(?:\\.|[^"\\])*"/g, '""')
+  for (const token of unquoted.match(/(?<![\d.eE])-?\d+(?![\d.eE])/g) ?? []) {
+    const value = BigInt(token)
+    if (value > BigInt(Number.MAX_SAFE_INTEGER) || value < -BigInt(Number.MAX_SAFE_INTEGER)) {
+      console.error(`cannot compare ${file}: integer ${token} exceeds Number.MAX_SAFE_INTEGER`)
+      process.exit(2)
+    }
+  }
 }
 
 function readJson(file) {
@@ -36,12 +56,20 @@ function readJson(file) {
     console.error(`nothing to compare: ${file} is empty`)
     process.exit(1)
   }
+  rejectUnsafeIntegers(text, file)
+  let parsed
   try {
-    return JSON.parse(text)
+    parsed = JSON.parse(text)
   } catch (error) {
     console.error(`cannot parse ${file}: ${error.message}`)
     process.exit(2)
   }
+  // An empty `[]` or `{}` compares equal to itself: no samples, no proof.
+  if (parsed !== null && typeof parsed === 'object' && Object.keys(parsed).length === 0) {
+    console.error(`nothing to compare: ${file} is empty`)
+    process.exit(1)
+  }
+  return parsed
 }
 
 const before = readJson(values.before)
@@ -74,7 +102,7 @@ function walk(x, y, path) {
 walk(before, after, '')
 
 console.log('differences:', differences.length)
-const byField = {}
+const byField = Object.create(null)
 for (const difference of differences) {
   byField[difference.path] = (byField[difference.path] || 0) + 1
 }

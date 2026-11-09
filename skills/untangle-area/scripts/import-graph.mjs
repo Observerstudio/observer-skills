@@ -21,9 +21,12 @@ mkdirSync(OUT, { recursive: true })
 const { abs: SOURCE, gitPath } = resolveSource(REPO, values.source)
 const ts = loadTypeScript(REPO, values.typescript)
 
-const read = ts.readConfigFile(join(REPO, 'tsconfig.json'), ts.sys.readFile)
-if (read.error) throw new Error(`cannot read ${join(REPO, 'tsconfig.json')}`)
-const config = ts.parseJsonConfigFileContent(read.config, ts.sys, REPO)
+const configPath = join(REPO, 'tsconfig.json')
+const read = ts.readConfigFile(configPath, ts.sys.readFile)
+// A repo without a tsconfig still has imports; fall back to compiler defaults.
+const config = read.error
+  ? ts.parseJsonConfigFileContent({}, ts.sys, REPO)
+  : ts.parseJsonConfigFileContent(read.config, ts.sys, REPO)
 const options = { ...config.options, noEmit: true, allowJs: true }
 const aliasKeys = Object.keys(options.paths ?? {})
 
@@ -62,6 +65,7 @@ for (const file of files) {
     }
     const to = rel(resolved.resolvedFileName)
     if (to.includes('node_modules/')) continue
+    if (to.startsWith('../')) continue
     if (gitPath !== '.' && to !== gitPath && !to.startsWith(`${gitPath}/`)) continue
     if (to === rel(file)) continue
     edges.push({ from: rel(file), to, spec })
@@ -109,12 +113,37 @@ for (const edge of edgeList) {
   if (!topEdges.has(a)) topEdges.set(a, new Set())
   topEdges.get(a).add(b)
 }
+// Cycles of any length: Tarjan's strongly connected components over the
+// top-level area graph, reporting every component with more than one area.
 const areaCycles = []
-for (const a of [...topEdges.keys()]) {
-  for (const b of topEdges.get(a) ?? []) {
-    if (a < b && topEdges.get(b)?.has(a)) areaCycles.push([a, b])
+const sccIndex = new Map()
+const sccLow = new Map()
+const sccStack = []
+const onStack = new Set()
+const connect = (node) => {
+  sccIndex.set(node, sccIndex.size)
+  sccLow.set(node, sccIndex.get(node))
+  sccStack.push(node)
+  onStack.add(node)
+  for (const next of topEdges.get(node) ?? []) {
+    if (!sccIndex.has(next)) {
+      connect(next)
+      sccLow.set(node, Math.min(sccLow.get(node), sccLow.get(next)))
+    } else if (onStack.has(next)) {
+      sccLow.set(node, Math.min(sccLow.get(node), sccIndex.get(next)))
+    }
   }
+  if (sccLow.get(node) !== sccIndex.get(node)) return
+  const component = []
+  let member
+  do {
+    member = sccStack.pop()
+    onStack.delete(member)
+    component.push(member)
+  } while (member !== node)
+  if (component.length > 1) areaCycles.push(component.sort())
 }
+for (const node of topEdges.keys()) if (!sccIndex.has(node)) connect(node)
 
 const markdown = []
 markdown.push('# Real import graph (TypeScript compiler API, alias-resolved)')
@@ -132,9 +161,9 @@ markdown.push('| from | to | imports |')
 markdown.push('|------|----|--------:|')
 folderRows.slice(0, 60).forEach((row) => markdown.push(`| ${row.a} | ${row.b} | ${row.n} |`))
 markdown.push('')
-markdown.push(`## Cycles between top-level areas, ${areaCycles.length}`)
+markdown.push(`## Cycles between top-level areas (strongly connected groups), ${areaCycles.length}`)
 markdown.push('')
-for (const [a, b] of areaCycles) markdown.push(`- **${a} <-> ${b}**`)
+for (const group of areaCycles) markdown.push(`- **${group.join(' -> ')} -> ${group[0]}**`)
 if (!areaCycles.length) markdown.push('- none')
 if (unresolved.length) {
   markdown.push('')
@@ -153,5 +182,5 @@ writeFileSync(
 console.log(
   `files=${files.length} edges=${edgeList.length} unresolved=${unresolved.length} areaCycles=${areaCycles.length}`,
 )
-console.log('cycles:', areaCycles.map(([a, b]) => `${a} <-> ${b}`).join(', ') || 'none')
+console.log('cycles:', areaCycles.map((group) => group.join('->')).join(', ') || 'none')
 console.log('folder edges top:', folderRows.slice(0, 10).map((row) => `${row.n} ${row.a} -> ${row.b}`).join('\n'))

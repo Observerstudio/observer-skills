@@ -65,6 +65,33 @@ test('a changed value fails the comparison', () => {
   )
 })
 
+test('empty JSON containers are rejected as empty dumps', () => {
+  withFiles({ 'before.json': '[]', 'after.json': '[]' }, (paths) => {
+    const result = run(['--before', paths['before.json'], '--after', paths['after.json']])
+    assert.equal(result.status, 1)
+    assert.match(result.stderr, /nothing to compare: .*before\.json is empty/)
+  })
+})
+
+test('empty JSON object is rejected as an empty dump', () => {
+  withFiles({ 'before.json': '{}', 'after.json': '{}' }, (paths) => {
+    const result = run(['--before', paths['before.json'], '--after', paths['after.json']])
+    assert.equal(result.status, 1)
+    assert.match(result.stderr, /nothing to compare: .*before\.json is empty/)
+  })
+})
+
+test('integers above Number.MAX_SAFE_INTEGER are rejected instead of rounded', () => {
+  withFiles(
+    { 'before.json': '{"n":9007199254740993}', 'after.json': '{"n":9007199254740992}' },
+    (paths) => {
+      const result = run(['--before', paths['before.json'], '--after', paths['after.json']])
+      assert.equal(result.status, 2)
+      assert.match(result.stderr, /MAX_SAFE_INTEGER/)
+    },
+  )
+})
+
 test('invalid JSON exits 2 with a clear message', () => {
   withFiles({ 'before.json': '{', 'after.json': '{}' }, (paths) => {
     const result = run(['--before', paths['before.json'], '--after', paths['after.json']])

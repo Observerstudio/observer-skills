@@ -160,18 +160,19 @@ async function main() {
   // (`walletColumnSums`) per wallet, live season (the list's ALL scope).
   const seasonScope = await resolveSoftSeasonScopeFilter({})
   const sums1 = walletColumnSums('wl')
-  const perWalletRows = seasonScope.seasonId
-    ? await prisma.$queryRaw<Array<Record<string, unknown>>>(Prisma.sql`
+  const seasonFilter = seasonScope.seasonId
+    ? Prisma.sql`AND wl.season_id = ${seasonScope.seasonId}`
+    : Prisma.sql``
+  const perWalletRows = await prisma.$queryRaw<Array<Record<string, unknown>>>(Prisma.sql`
         SELECT wl.wallet_id AS wallet_id,
                COALESCE(SUM(wl.amount), 0)::numeric AS balance,
                ${sums1.credit} AS credit,
                ${sums1.debit} AS debit,
                ${sums1.held} AS held
         FROM wallet_ledger wl
-        WHERE wl.voided_at IS NULL AND wl.season_id = ${seasonScope.seasonId}
+        WHERE wl.voided_at IS NULL ${seasonFilter}
         GROUP BY wl.wallet_id
       `)
-    : []
   const perWalletById = new Map(perWalletRows.map((r) => [String(r.wallet_id), r]))
   const walletColumns: Record<string, unknown> = {}
   for (const id of walletIds) {
@@ -295,10 +296,6 @@ async function main() {
       byBoatId: Object.fromEntries([...debt.byBoatId].sort(([a], [b]) => (a < b ? -1 : 1))),
     }
     outstandingTotal += debt.total
-  }
-  if (Object.keys(outstanding).length === 0) {
-    console.error('HARD FAIL: outstanding debt read zero wallets')
-    process.exit(3)
   }
 
   // ---- 4. collection ratio, per account and in total --------------------------

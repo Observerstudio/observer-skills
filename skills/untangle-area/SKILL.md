@@ -7,7 +7,7 @@ argument-hint: "[area]"
 
 # Untangle one area
 
-Run this only when a person asked for it by name. If you loaded it on your own, stop and ask first. Area: $ARGUMENTS (if empty, ask which area).
+Run this only when a person asked for it by name. If you loaded it on your own, stop and ask first. Area: $ARGUMENTS (if empty, step 0 picks one after the map).
 
 **Core question, for every piece: should these pieces change together?**
 
@@ -21,21 +21,21 @@ Take the area from the argument. If none is given, run the map and pick the high
 
 An area is a feature, not a folder: the screens, the services behind them, and their direct import neighbours.
 
-Write `docs/untangle/<area>.md` as the only durable memory of the run. A new session resumes from that file, not from a previous conversation.
+Write `docs/untangle/<area>.md` as the primary handoff and the only durable memory of this area's run. A new session resumes from that file, not from a previous conversation. `docs/untangle/cross-area.md` is a separate shared index of links that cross areas (step 2), not part of this area's log.
 
 **Done when:** the area name, its files, and the decision-log path are written at the top of `docs/untangle/<area>.md`.
 
 ## 1. Map, don't read
 
-Run the scanners in this skill's `scripts/` folder against the target repo. They are the map; no file is opened until step 2. The AST scanners need the repo's own TypeScript; if its dependencies are not installed, pass `--typescript <module>` or set `TS_MODULE`.
+Run the scanners in this skill's `scripts/` folder against the target repo. They are the map; no file is opened until step 2. Set `SKILL_DIR` once to the folder holding this `SKILL.md`, then every command runs the skill's script and passes the target repo through `--root`. The AST scanners need the repo's own TypeScript; if its dependencies are not installed, pass `--typescript <module>` or set `TS_MODULE`.
 
 | Question | Command |
 |---|---|
-| What changes most, and where? | `node scripts/hotspots.mjs --root <repo> --out <repo>/tmp/untangle-evidence` |
-| What always changes together? | `node scripts/coupling.mjs --root <repo> --out <repo>/tmp/untangle-evidence` |
-| What imports what, and where are the cycles? | `node scripts/import-graph.mjs --root <repo> --out <repo>/tmp/untangle-evidence` |
-| Where are the special cases? | `node scripts/special-cases.mjs --root <repo> --out <repo>/tmp/untangle-evidence --label <area>` |
-| Where are the hand-kept vocabulary lists? | `node scripts/vocab-lists.mjs --root <repo> --out <repo>/tmp/untangle-evidence --label <area>` |
+| What changes most, and where? | `node "$SKILL_DIR/scripts/hotspots.mjs" --root <repo> --out <repo>/tmp/untangle-evidence` |
+| What always changes together? | `node "$SKILL_DIR/scripts/coupling.mjs" --root <repo> --out <repo>/tmp/untangle-evidence` |
+| What imports what, and where are the cycles? | `node "$SKILL_DIR/scripts/import-graph.mjs" --root <repo> --out <repo>/tmp/untangle-evidence` |
+| Where are the special cases? | `node "$SKILL_DIR/scripts/special-cases.mjs" --root <repo> --out <repo>/tmp/untangle-evidence --label <area>` |
+| Where are the hand-kept vocabulary lists? | `node "$SKILL_DIR/scripts/vocab-lists.mjs" --root <repo> --out <repo>/tmp/untangle-evidence --label <area>` |
 
 `--source <dir>` overrides the source tree (default: `<repo>/src` when it exists, else the repo root). If the repo has an enum schema, add `--schema <file>` to `special-cases.mjs`; without it the enum-list section is skipped and every other detector still runs.
 
