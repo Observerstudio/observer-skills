@@ -1,45 +1,121 @@
-# Observer skills
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset=".github/assets/banner-dark.svg">
+    <img alt="Observer skills" src=".github/assets/banner-light.svg" width="640">
+  </picture>
+</p>
 
-Observer studio's agent skills, one folder per skill under `skills/`. They work with Claude Code, Codex, OpenCode and the other agents [skills.sh](https://www.skills.sh/) supports.
+<p align="center">
+  <a href="https://skills.sh/Observerstudio/observer-skills"><img alt="skills.sh" src="https://skills.sh/b/Observerstudio/observer-skills"></a>
+  <a href="https://github.com/Observerstudio/observer-skills/actions/workflows/check-skills.yml"><img alt="check-skills" src="https://github.com/Observerstudio/observer-skills/actions/workflows/check-skills.yml/badge.svg"></a>
+</p>
+
+<p align="center">
+  <b>The skills Observer studio uses every day to ship production software with a team of AI agents.</b><br>
+  One session coordinates, cheap lanes write the code, every PR is attacked before it merges, and releases are rehearsed on copies first.
+</p>
+
+---
+
+## Why
+
+Agents write code fast. Without a process, they also skip the review, merge on a green tick that tested nothing, and promote a release over a hotfix. These skills are that process, written down so any agent can follow it:
+
+- **One coordinator, many lanes.** A strong model plans, briefs and gates; cheaper lanes implement.
+- **Every PR is attacked first.** The gate assumes a defect exists, runs its own mutations, and posts what it tried.
+- **Nothing ships unrehearsed.** Merges, migrations and builds run on copies before the real thing.
+- **Code that stays small enough to read.** Untangle a codebase once, then keep it untangled one area at a time.
+
+They work with Claude Code, Codex, OpenCode, pi and every agent [skills.sh](https://skills.sh/) supports.
+
+## How they fit together
+
+```mermaid
+flowchart LR
+  A[coordinator] -->|writes| B[writing-lane-briefs]
+  B -->|lane builds + hands back| C[writing-pr-bodies]
+  C --> D[pr-review<br/>author → gate]
+  D -->|MERGE| E[promoting-a-release]
+  F[untangle-codebase] --> G[untangle-area]
+  G -.->|smaller areas,<br/>shorter briefs| B
+```
 
 ## Install
 
-Pick one way per agent; installing both gives you every skill twice.
+Pick **one** way per agent. Installing both gives you every skill twice.
 
-**Claude Code plugin (updates itself):**
+<details open>
+<summary><b>Claude Code</b> (plugin, updates itself)</summary>
 
 ```bash
 claude plugin marketplace add Observerstudio/observer-skills
 claude plugin install observer-skills@observer
 ```
 
-**skills.sh (copies the files; update with `npx skills update`):**
+</details>
+
+<details>
+<summary><b>Any agent</b> (skills.sh, copies the files)</summary>
 
 ```bash
-npx skills add Observerstudio/observer-skills -g -y                            # every skill
-npx skills add Observerstudio/observer-skills --skill promoting-a-release -g -y   # one skill
+npx skills add Observerstudio/observer-skills -g -y                              # every skill
+npx skills add Observerstudio/observer-skills --skill promoting-a-release -g -y  # one skill
 ```
+
+Update with `npx skills update`.
+
+</details>
 
 ## Skills
 
-| Skill | Use it to |
+### Coordinate a work track
+
+| Skill | Use it when |
 |---|---|
-| [`coordinator`](skills/coordinator/SKILL.md) | Run a work track: diagnose, brief lanes, gate PRs and merge, while lanes do the implementation. Start at [`docs/onboarding.md`](skills/coordinator/docs/onboarding.md). |
-| [`writing-lane-briefs`](skills/writing-lane-briefs/SKILL.md) | Write the brief a lane executes unattended: a plain-English part for the team, then the technical brief. |
-| [`pr-review`](skills/pr-review/SKILL.md) | Self-review before a PR (author mode), or gate a PR to MERGE or CHANGES (gate mode). A repo adopts it with [`review-standards-template.md`](skills/pr-review/review-standards-template.md). |
-| [`writing-pr-bodies`](skills/writing-pr-bodies/SKILL.md) | The PR body a lane hands back. Superseded by `pr` from mattpocock/skills; kept for briefs that still name it. |
-| [`promoting-a-release`](skills/promoting-a-release/SKILL.md) | Promote a branch rung or ship a hotfix, rehearsing each step on a copy first so no work is lost. A repo adopts it with [`promotion-template.md`](skills/promoting-a-release/promotion-template.md). |
-| [`untangle-codebase`](skills/untangle-codebase/SKILL.md) | Untangle a whole codebase in one pass so agents read less per change, break less without noticing, and debug faster. Typed by a person (`/untangle-codebase`). Claude Code never auto-invokes it (`disable-model-invocation`); other agents are told in the skill to stop and ask unless a person named it. |
-| [`untangle-area`](skills/untangle-area/SKILL.md) | Untangle one area of a large codebase end to end (map, decision log, tickets, gate, production-copy proof and a lock) without loading the whole repo. Typed by a person (`/untangle-area`); Claude Code never auto-invokes it, other agents are told to stop and ask unless a person named it. |
+| [**coordinator**](skills/coordinator/SKILL.md) | You run a whole track: diagnose, brief lanes, gate PRs, merge. Start at the [onboarding guide](skills/coordinator/docs/onboarding.md). |
+| [**writing-lane-briefs**](skills/writing-lane-briefs/SKILL.md) | You hand work to a lane that will not ask questions. |
+| [**pr-review**](skills/pr-review/SKILL.md) | Before opening a PR (author mode), or to gate one to MERGE or CHANGES (gate mode). |
+| [**writing-pr-bodies**](skills/writing-pr-bodies/SKILL.md) | A lane hands back its PR body. Superseded by `pr` from [mattpocock/skills](https://github.com/mattpocock/skills); kept for older briefs. |
 
-The coordinator is used with [OCH — Observer Coordination Hub](https://github.com/Observerstudio/observer-coordination-hub), where claims, messages and knowledge live on a hub that feeds every session.
+### Ship a release
 
-## Adding a skill
+| Skill | Use it when |
+|---|---|
+| [**promoting-a-release**](skills/promoting-a-release/SKILL.md) | You promote development → staging → master, or ship a hotfix. Every step is rehearsed on a copy first. |
 
-1. Create `skills/<name>/SKILL.md`. Its frontmatter `name` matches the folder, and a `description` names when to use it. Write it with `writing-for-agents`.
-2. Add `./skills/<name>` to `.claude-plugin/plugin.json`, and add the skill to a grouping in `skills.sh.json`.
-3. Check it: `npm install --no-save yaml && node scripts/check-skills.mjs`. CI runs the same check on every PR.
+### Untangle a codebase
 
-## Moved from `Observerstudio/coordinator`
+| Skill | Use it when |
+|---|---|
+| [**untangle-codebase**](skills/untangle-codebase/SKILL.md) | A whole repo has grown hard for agents to change safely. One pass, typed by a person. |
+| [**untangle-area**](skills/untangle-area/SKILL.md) | One area of a large repo needs untangling end to end: map, decision log, tickets, proof on a production copy, and a lock. |
 
-This repo was `Observerstudio/coordinator`; the old name still redirects. If you installed from the old layout, reinstall once with a line above. Skills moved from the root into `skills/<name>/`, so an old install can't update itself.
+The untangle skills run only when a person types them; agents never start them on their own.
+
+### Adopting in a repo
+
+Two skills read a small file from your repo, so they follow your rules instead of ours:
+
+| Skill | Copy this into your repo |
+|---|---|
+| pr-review | [`review-standards-template.md`](skills/pr-review/review-standards-template.md) → `docs/agents/review-standards.md` |
+| promoting-a-release | [`promotion-template.md`](skills/promoting-a-release/promotion-template.md) → `docs/agents/promotion.md` |
+
+The coordinator pairs with [OCH, the Observer Coordination Hub](https://github.com/Observerstudio/observer-coordination-hub), where claims, messages and shared knowledge live for every session.
+
+## Contributing
+
+1. Create `skills/<name>/SKILL.md`. The frontmatter `name` matches the folder, and the `description` says when to use it.
+2. Add `./skills/<name>` to [`.claude-plugin/plugin.json`](.claude-plugin/plugin.json) and to a grouping in [`skills.sh.json`](skills.sh.json).
+3. Run the check CI runs on every PR:
+
+   ```bash
+   npm install --no-save yaml && node scripts/check-skills.mjs
+   ```
+
+<details>
+<summary>Moved from <code>Observerstudio/coordinator</code></summary>
+
+This repo used to be `Observerstudio/coordinator`, and the old name still redirects. Skills moved from the root into `skills/<name>/`, so an install from the old layout cannot update itself: reinstall once with a command above.
+
+</details>

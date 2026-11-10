@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="200" viewBox="0 0 800 200" role="img" aria-label="Observer skills">
+  <rect width="800" height="200" rx="16" fill="#0d1117" stroke="#30363d"/>
+  <g font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">
+    <text x="56" y="92" font-size="44" font-weight="700" fill="#f0f6fc">Observer skills</text>
+    <text x="56" y="132" font-size="20" fill="#8b949e">Agent skills for shipping production software with a team of agents</text>
+  </g>
+  <g fill="none" stroke="#58a6ff" stroke-width="3" stroke-linecap="round">
+    <circle cx="690" cy="100" r="34"/>
+    <circle cx="690" cy="100" r="12" fill="#58a6ff"/>
+    <path d="M690 54v-14M690 160v-14M644 100h-14M750 100h-14"/>
+  </g>
+</svg>
