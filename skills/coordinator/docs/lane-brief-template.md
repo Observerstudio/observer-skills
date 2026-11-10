@@ -63,7 +63,7 @@ the feature code was never wrong once. So the brief names, explicitly:
 
 - **The seeding pattern file, by path and line range.** "Follow `<file>:60-105`" beats "create a
   fixture". Every writer nature has a sibling test that already seats its rows correctly.
-- **Which rows the nature actually needs.** A `move_selected_boxes` nature needs real rows in the
+- **Which rows the nature actually needs.** A `move_selected_items` nature needs real rows in the
   source's bucket, plus the matching inventory-projection row — not just the parties. A
   quantity-only nature needs neither. Say which.
 - **The shared-uniqueness helpers, and their semantics.** Name the reservation helper for any
@@ -84,7 +84,7 @@ thirty seconds; the slot run costs minutes and is serialised machine-wide.
 ## Acceptance — the Gherkin file is the gate (since 2026-09-13)
 The coordinator writes `.worktrees/LANE-ACCEPT-<issue>.feature` next to the brief: one `Feature`,
 one `Scenario` per acceptance criterion, plain Given/When/Then, one observable outcome each, in the
-domain's words (baskets, book, receipt), never implementation words (table, column, hook). Pointer to
+domain's words (order, invoice, receipt), never implementation words (table, column, hook). Pointer to
 it goes in the brief's Tests section.
 The lane maps scenarios to tests 1:1: each `Scenario:` title becomes the `it()` title VERBATIM. Unit
 scenarios get the red-first run above from the lane; integration scenarios are WRITTEN by the lane and

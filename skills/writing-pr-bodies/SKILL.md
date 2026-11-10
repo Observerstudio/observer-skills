@@ -12,7 +12,7 @@ The shape is fixed; fill `pr-body-template.md` section by section and save it as
 
 ## The two parts, in this order
 
-1. **`## What changes for the team`** — 3–6 sentences a fish-market operator's manager can read.
+1. **`## What changes for the team`** — 3–6 sentences the client's operations manager can read.
    What the operator sees differently, what stays exactly the same, what could go wrong and how
    we would notice. Name screens and fields by the app's own labels (`messages/ar.json`), never
    file names, never table names, never an acronym. Copy the brief's paragraph and correct it
@@ -43,36 +43,33 @@ Then, always:
 - **No numbers in the plain part.** Counts and test totals live in `## Gate`.
 - **A caveat changes what the reader does or it is not a caveat.** If a screen is unchanged, say
   "no screen behaves differently for anyone today", not "may affect".
-- **Arabic labels are quoted verbatim** from `messages/ar.json` («تاريخ الإرجاع»), never
+- **UI labels are quoted verbatim** from the app's message files (e.g. `messages/ar.json`), never
   translated back to English in the plain part.
 - **What you did not verify, you say you did not verify.** A body that claims a run that did not
   happen is a LANE-BLOCKED waiting to be found at the gate.
 - Short beats complete. Ten lines that are all true beat forty that pad.
 
-## Worked example (PR #2262, the ⋯ menu)
+## Worked example (the ⋯ menu)
 
 ```markdown
 ## What changes for the team
 
-On the sales journal, the two buttons on every sale row («تصحيح التاريخ» and «طباعة») now live
-inside one three-dot menu at the end of the row. Nothing else changes yet. This frees the row for
-the next step the client asked for: showing the notes and the return date on the same line.
+On the orders page, the two buttons on every order row ("Edit date" and "Print") now live inside
+one three-dot menu at the end of the row. Nothing else changes yet. This frees the row for the
+next step the client asked for: showing the notes and the delivery date on the same line.
 
 ## What changed in the code
 
-- `src/components/admin/journal/journal-sale-groups.tsx`: the two `Button`s become
-  `DropdownMenuItem`s under one `DropdownMenu` trigger. Gating for the date correction (cash
-  sale, completed, `canCorrectCashSaleDate`) and the print spinner / disabled state are
-  unchanged. Clicks stop propagation so the row does not toggle.
-- `messages/en.json`, `messages/ar.json`: one key, `admin.journalPage.saleGroup.actionsAria`
-  («إجراءات البيع»), for the trigger's aria-label.
+- `src/components/orders/order-row.tsx`: the two `Button`s become `DropdownMenuItem`s under one
+  `DropdownMenu` trigger. Gating for the date edit (`canEditOrderDate`) and the print spinner /
+  disabled state are unchanged. Clicks stop propagation so the row does not toggle.
+- `messages/en.json`, `messages/ar.json`: one key, `orders.row.actionsAria`, for the trigger's
+  aria-label.
 
-## Gate (worktree on origin/development 401f73cf7)
-- unit `src/components/admin/journal` + `src/lib/i18n`: 17 files, 393 passed
+## Gate (worktree on origin/main 401f73c)
+- unit `src/components/orders` + `src/lib/i18n`: 17 files, 393 passed
 - tsc --noEmit: exit 0
-- eslint on the touched component: clean
-
-Slice C1 of #2261.
+- lint on the touched component: clean
 ```
 
 ## Anti-patterns the gate rejects
