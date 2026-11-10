@@ -1,6 +1,6 @@
 ---
 name: writing-pr-bodies
-description: Use when a lane finishes a brief and must hand the coordinator the PR body — or when anyone writes or rewrites a PR description. Produces the two-part body Selal PRs use — plain English first, then the technical record with pasted evidence.
+description: Use when a lane finishes a brief and must hand the coordinator the PR body — or when anyone writes or rewrites a PR description. Produces the two-part body our PRs use — plain English first, then the technical record with pasted evidence.
 ---
 
 # Writing PR bodies

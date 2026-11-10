@@ -68,8 +68,8 @@ state object that rides every edge. You follow it; you do not improvise a route.
    with neither on 2026-10-04). Every gate, every PR — not gated on size or money. ONE verdict,
    yours. The three passes run in you or in ONE delegated read-only reader whose prompt carries
    the **pasted facts** (the 5–10 rules, rulings and file:line facts it needs) and the diff,
-   nothing to look up. Pasted facts cut a money gate from 13–39 tool calls to 4–5 (selal-v2,
-   2026-10-21). One reader, never a fan-out.
+   nothing to look up. Pasted facts cut a money gate from 13–39 tool calls to 4–5 (measured on a production
+   app, 2026-10-21). One reader, never a fan-out.
 2. `merge-risk` on the PR, verdict in the gate comment. A medium or high names the cheapest step
    that lowers it and does it before merging, or says why not. Screenshot a real UI or flow
    change; a wording change needs none.

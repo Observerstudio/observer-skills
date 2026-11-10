@@ -3,7 +3,7 @@
 The operating model, as practiced. Each product repo pins its own specifics (paths,
 commands, protected-branch vocabulary) in its own agent docs — usually `docs/agents/`
 plus the repo's `CLAUDE.md`. This page is the shared model. Where a rule needs a
-concrete shape, look for the **Example from selal-v2** blocks.
+concrete shape, look for the **Example from a production app** blocks.
 
 ## Roles
 
@@ -23,7 +23,7 @@ VERDICT: pass / reject), every dashed loop-back has a ceiling of two before it r
 human, and one state file per track ([track-state-template.md](track-state-template.md)) rides
 the edges so nothing is re-explained. The gate below is the VERDICT router's input.
 
-> **Example from selal-v2 (2026-09-09):** one audit finding went round the reject edge twice on
+> **Example from a production app (2026-09-09):** one audit finding went round the reject edge twice on
 > the same test fixture before the third brief named the exact lookup by file and line. The
 > ceiling now makes round three a human decision, not a fourth lane turn.
 
@@ -48,7 +48,7 @@ Amended history → fresh ref + new PR. Follow-up commits only.
 
 Branch names must respect the repo's protected-branch vocabulary.
 
-> **Example from selal-v2:** branch names must not contain `master`.
+> **Example from a production app:** branch names must not contain `master`.
 
 ## Integration slot
 
@@ -61,7 +61,7 @@ database state. Treat that suite as **one slot per machine**, held like a lock:
 - **Never dispatch a lane to run the exclusive suite** — coordinators take the slot
   themselves.
 
-> **Example from selal-v2:** the slot is `vitest --project=integration` (one run
+> **Example from a production app:** the slot is `vitest --project=integration` (one run
 > machine-wide; two runs delete each other's database). Before taking it the grantor
 > confirms nothing is live: `pgrep -f "vitest run --project=integration"`.
 
@@ -77,7 +77,7 @@ database state. Treat that suite as **one slot per machine**, held like a lock:
 - The client gives needs; **we choose the mechanism**.
 - Client-facing text goes in the client's language; English in the terminal.
 
-> **Example from selal-v2:** client-facing updates are written in plain Arabic;
+> **Example from a production app:** client-facing updates are written in the client's own language, in plain words;
 > everything in the terminal stays English.
 - **Never repeat work.** Before dispatching, check the handoff file, open PRs, recent
   merges, and the issue — done, in-flight, and decided all look like "todo" from a cold
@@ -94,7 +94,7 @@ database state. Treat that suite as **one slot per machine**, held like a lock:
 - Zero-writes claims are **verified with row counts**, not asserted.
 - Findings go to dated note files and merge via PR. Each repo defines where notes live.
 
-> **Example from selal-v2:** findings land in `docs/notes/YYYY-MM-DD-*.md`.
+> **Example from a production app:** findings land in `docs/notes/YYYY-MM-DD-*.md`.
 
 ## Related Observer repos
 
