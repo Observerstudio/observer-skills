@@ -88,9 +88,9 @@ DIFF_NOW=2026-11-09T12:00:00Z npx tsx proof-template/money-reads.ts --root . --a
 # in the after tree
 npx tsx proof-template/dump-lists.ts  --root . --area src/server/services/return-log > ../after/lists.json
 DIFF_NOW=2026-11-09T12:00:00Z npx tsx proof-template/money-reads.ts --root . --area src/server/services/return-log > ../after/reads.json
-# compare the list dump and the read dump
-node proof-template/compare.js --before ../before/lists.json --after ../after/lists.json
-node proof-template/compare.js --before ../before/reads.json --after ../after/reads.json --out differences.json
+# compare the list dump and the read dump (the generic comparer stays in the skill)
+node "$SKILL_DIR/proof-template/compare.js" --before ../before/lists.json --after ../after/lists.json
+node "$SKILL_DIR/proof-template/compare.js" --before ../before/reads.json --after ../after/reads.json --out differences.json
 ```
 
 ## Money hold, in Selal terms
