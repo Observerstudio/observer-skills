@@ -63,7 +63,7 @@ the feature code was never wrong once. So the brief names, explicitly:
 
 - **The seeding pattern file, by path and line range.** "Follow `<file>:60-105`" beats "create a
   fixture". Every writer nature has a sibling test that already seats its rows correctly.
-- **Which rows the nature actually needs.** A `move_selected_boxes` nature needs real rows in the
+- **Which rows the nature actually needs.** A `move_selected_items` nature needs real rows in the
   source's bucket, plus the matching inventory-projection row — not just the parties. A
   quantity-only nature needs neither. Say which.
 - **The shared-uniqueness helpers, and their semantics.** Name the reservation helper for any
@@ -84,7 +84,7 @@ thirty seconds; the slot run costs minutes and is serialised machine-wide.
 ## Acceptance — the Gherkin file is the gate (since 2026-09-13)
 The coordinator writes `.worktrees/LANE-ACCEPT-<issue>.feature` next to the brief: one `Feature`,
 one `Scenario` per acceptance criterion, plain Given/When/Then, one observable outcome each, in the
-domain's words (baskets, book, receipt), never implementation words (table, column, hook). Pointer to
+domain's words (order, invoice, receipt), never implementation words (table, column, hook). Pointer to
 it goes in the brief's Tests section.
 The lane maps scenarios to tests 1:1: each `Scenario:` title becomes the `it()` title VERBATIM. Unit
 scenarios get the red-first run above from the lane; integration scenarios are WRITTEN by the lane and
@@ -97,9 +97,9 @@ greps to a green test, or the PR states the deferral.
 
 Example (one scenario is enough to show the shape):
 ```gherkin
-Feature: Day sheet print survives corrections (#2081)
+Feature: Day sheet print survives corrections
   Scenario: a corrected line prints its current quantity as a plain number
-    Given a wholesaler day with one sale line adjusted from 5 to 3 baskets
+    Given a customer day with one order line adjusted from 5 to 3 units
     When the day sheet is read for printing
     Then the line shows 3
 ```
@@ -167,8 +167,6 @@ UPDATEs the child row into a state no branch of the CHECK accepts, and Postgres
 reports a misleading check-constraint violation ("new row for relation …") that points
 away from the real cause — so delete the child before the parent.
 
-> **Example from selal-v2:** issue #1102 established the pattern in
-> `src/server/services/operations-sheet.write-path.integration.test.ts`. Four tables
-> hold `movement_ledger` under `onDelete: Restrict` and must go before it;
-> `box_batch_state` combines a SetNull wholesaler FK with a payer CHECK constraint,
-> which makes its deletion order load-bearing.
+> **Example from a production app:** four tables hold the ledger table under
+> `onDelete: Restrict` and must go before it; one table combines a SetNull foreign key
+> with a CHECK constraint, which makes its deletion order load-bearing.

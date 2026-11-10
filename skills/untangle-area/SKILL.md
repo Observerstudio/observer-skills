@@ -128,7 +128,7 @@ Any fix that touches money, custody or a dated book is proven on a production co
 
 `proof-template/compare.js` is the generic comparer: exit 0 only when every sampled value is identical, exit 1 on any difference or an empty dump, exit 2 on a read/parse error. Copy it into both trees, or run it once against the two dumped files.
 
-The adapters that know a particular area's lists, imports and service reads are written per area — the worked example in `examples/` shows two. Rewire the imports and the list names, keep `--root`, and paste the commands, the row counts and `differences: 0` into the PR body. If a difference is real and intended, it is a money decision and needs the owner's approval before the ticket can land.
+The adapters that know a particular area's lists, imports and service reads are written per area. Rewire the imports and the list names, keep `--root`, and paste the commands, the row counts and `differences: 0` into the PR body. If a difference is real and intended, it is a money decision and needs the owner's approval before the ticket can land.
 
 **Done when:** the counts are non-zero in both trees and `compare.js` reports `differences: 0`, or the only differences are the approved money decision and its count is pasted.
 
@@ -136,7 +136,7 @@ The adapters that know a particular area's lists, imports and service reads are 
 
 A fix ends by making the area unable to slide back. Lower the baseline entry that the fix removes, or add the owner registration for the one fact the fix consolidated.
 
-The owning check is whatever the repo uses for financial invariants: an architecture test with a committed baseline, a lint rule with a frozen file list, or a registry of owned facts. Add a file to a frozen list only through that check's generator, never by hand; an `off` override is not a place to park a new finding. Baselines only shrink. The worked example's exact paths are in `examples/`.
+The owning check is whatever the repo uses for financial invariants: an architecture test with a committed baseline, a lint rule with a frozen file list, or a registry of owned facts. Add a file to a frozen list only through that check's generator, never by hand; an `off` override is not a place to park a new finding. Baselines only shrink.
 
 **Done when:** the ticket that lands the fix also lowers a baseline or adds an owner registration, and the owning test goes red when the old entry is put back.
 
@@ -158,10 +158,9 @@ Update the file at each natural break: status lines, new `NEEDS-AHMED` items, cr
 
 After the baseline run, replace this list with the exact rationalisations the no-skill pane used, and delete the ones that did not occur.
 
-## Worked example and proof
+## Proof
 
-- The study that set the standard, the areas that came next, the scanner commands for that repo, and the two proof adapters are in [`examples/`](examples/).
-- `proof-template/compare.js` is generic; adapters like the two in the example are written per area.
+- `proof-template/compare.js` is generic; the adapters that feed it are written per area.
 
 ## Test protocol (the coordinator runs it)
 
