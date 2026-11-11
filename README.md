@@ -68,6 +68,12 @@ Update with `npx skills update`.
 
 ## Skills
 
+### Start a project
+
+| Skill | Use it when |
+|---|---|
+| [**choosing-a-stack**](skills/choosing-a-stack/SKILL.md) | A new project's stack is not yet chosen. Interview the lead in rounds, recommend only from the approved menu, write `docs/adr/0001-stack.md`. |
+
 ### Coordinate a work track
 
 | Skill | Use it when |

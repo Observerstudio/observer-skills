@@ -2,6 +2,11 @@
   "$schema": "https://skills.sh/schemas/skills.sh.schema.json",
   "groupings": [
     {
+      "title": "Start a project",
+      "description": "Choose a new project's stack from Observer's approved menu by interviewing the lead, and record it as the repo's first ADR.",
+      "skills": ["choosing-a-stack"]
+    },
+    {
       "title": "Coordination",
       "description": "Run a whole work track as the coordinator — brief lanes with writing-lane-briefs, have them hand back the PR body with writing-pr-bodies, review with pr-review (author before the PR, gate at the merge), hold the one integration slot.",
       "skills": [
