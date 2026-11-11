@@ -83,6 +83,7 @@ Update with `npx skills update`.
 | [**pr-review**](skills/pr-review/SKILL.md) | Before opening a PR (author mode), or to gate one to MERGE or CHANGES (gate mode). |
 | [**writing-pr-bodies**](skills/writing-pr-bodies/SKILL.md) | A lane hands back its PR body. Superseded by `pr` from [mattpocock/skills](https://github.com/mattpocock/skills); kept for older briefs. |
 | [**audit-decisions**](skills/audit-decisions/SKILL.md) | Before merging lane work: list every decision the lane made that its brief did not cover, so the gate reviews decisions, not only the diff. |
+| [**be-ambitious**](skills/be-ambitious/SKILL.md) | Before a brief, a diagnosis, a gate plan or any task worth doing well: asks what a top professional would do, the rawest material, the methods, and what outside check proves it right, then rewrites the task to ask for that. From [DannyMac180/skills](https://github.com/DannyMac180/skills) (MIT). |
 
 ### Author a skill
 

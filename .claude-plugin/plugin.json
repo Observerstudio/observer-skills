@@ -1,7 +1,7 @@
 {
   "name": "observer-skills",
   "version": "1.0.0",
-  "description": "Observer studio's agent skills: coordinate a work track, brief lanes, review and gate PRs, write PR bodies, promote a release, untangle a codebase, choose a stack, audit a lane's decisions, eval a skill blind.",
+  "description": "Observer studio's agent skills: coordinate a work track, brief lanes, review and gate PRs, write PR bodies, promote a release, untangle a codebase, choose a stack, audit a lane's decisions, eval a skill blind, deepen a task before starting it.",
   "author": {
     "name": "Observer studio",
     "url": "https://github.com/Observerstudio"
@@ -15,7 +15,8 @@
     "skills",
     "refactoring",
     "skill-evaluation",
-    "decision-audit"
+    "decision-audit",
+    "prompting"
   ],
   "skills": [
     "./skills/coordinator",
@@ -27,6 +28,7 @@
     "./skills/untangle-area",
     "./skills/choosing-a-stack",
     "./skills/eval-skills",
-    "./skills/audit-decisions"
+    "./skills/audit-decisions",
+    "./skills/be-ambitious"
   ]
 }
