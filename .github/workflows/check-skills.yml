@@ -9,3 +9,4 @@ jobs:
         with: { node-version: 22 }
       - run: npm install --no-save yaml@2.8.1
       - run: node scripts/check-skills.mjs
+      - run: node scripts/check-nda.mjs
