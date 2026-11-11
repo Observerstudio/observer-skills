@@ -13,8 +13,14 @@
         "coordinator",
         "writing-lane-briefs",
         "pr-review",
-        "writing-pr-bodies"
+        "writing-pr-bodies",
+        "audit-decisions"
       ]
+    },
+    {
+      "title": "Authoring",
+      "description": "Improve a skill by running it blind on real cases: one clean session per case, a separate judge against a stated bar, and the misses drive the edits.",
+      "skills": ["eval-skills"]
     },
     {
       "title": "Release",
