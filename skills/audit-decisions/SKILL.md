@@ -5,6 +5,8 @@ description: Audit the decisions an implementing agent made, not its diff — a 
 
 # Audit Decisions
 
+Run this only when a person asked for it by name, or a brief or workflow you are executing names it (that is the only unsupervised use). If you loaded it on your own, stop and ask first: it writes to the PR.
+
 Given a good decision, an agent implements it faithfully; wherever the task is
 underspecified, it makes the decision itself — silently, and the diff won't
 flag it. Reviewing thousands of changed lines doesn't scale, and it inspects
@@ -101,7 +103,10 @@ Two ways in, same audit:
 
 For us the ledger rides in the **PR body or a PR comment** — the gate
 convention, where every recorded review already goes — rather than a new
-file type. It outlives every pass because the PR body is updated pass by
+file type. Before a PR exists (an audit before commit, or a lane mid-run),
+write it to `docs/notes/<branch>-decisions.md` and commit it with the work;
+when the PR opens, copy the ledger into the PR body and point the note at the
+PR, so there is one live copy. It outlives every pass because the PR body is updated pass by
 pass, so a later pass reads settled entries there and never re-decides them.
 One entry per audited decision:
 

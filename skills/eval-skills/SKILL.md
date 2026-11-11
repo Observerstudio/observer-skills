@@ -1,9 +1,12 @@
 ---
 name: eval-skills
+disable-model-invocation: true
 description: Eval and improve a skill against golden cases — run the target skill blind in a fresh, context-free session on each example input, grade the artifact against the expected outcome, and let the gaps drive the edits. Use when the user wants to test/eval/improve/harden a skill, says "this skill keeps producing X / keeps missing Y", or hands a skill plus example input→expected-output pairs. Pairs with the authoring principles every fix obeys.
 ---
 
 # Eval Skills
+
+Run this only when a person asked for it by name. It starts new sessions and edits another skill; if you loaded it on your own, stop and ask first.
 
 Treat a skill like a function under test. Feed it example inputs in a clean
 room, check the artifacts against what good looks like, and let the failures
@@ -50,13 +53,17 @@ fuzzy wish.
    user cares about, never widened into a prescribed parts list unless the
    skill is conformance-style. Done when you can state the skill's first
    principles in a sentence and every case has a concrete input and a bar a
-   competent judge could hold an artifact to.
+   competent judge could hold an artifact to, and the trial count and pass
+   rate (step 4) are written down.
 
 2. **Blind run, one fresh session per case.** Run the blind step in a separate
    session with no shared context: a new pi pane (`hc run --bg … pi`) or
    `claude -p "<prompt>" --allowedTools <only what the step needs>`, started
-   from an empty folder holding only the target skill and the case input. A
-   session started that way has never seen this conversation, and that is the
+   from a fresh fixture folder holding the target skill's **whole** folder (its
+   `SKILL.md` plus every resource it ships) and the case input. When the skill's
+   real input is a repository or a session history, the fixture includes that
+   too: a throwaway clone at a fixed commit, or the saved transcript. Never the
+   conversation, the bar, or the other cases. A session started that way has never seen this conversation, and that is the
    whole point — its blindness is the eval's honesty.
 
    Isolate every run so a misbehaving skill can't touch the live checkout and
@@ -65,12 +72,14 @@ fuzzy wish.
    and nothing hits disk to leak. When the skill must write files, give the
    runner a throwaway sandbox dir as its only writable root, not a worktree of
    the live repo (worktree isolation guards git state, not absolute-path or
-   escaped writes). After every run, sweep the live checkout (`git status`) and
-   clean anything the run leaked — isolation is best-effort, the sweep is the
-   guarantee. Give the runner **only** the input and the instruction to use the
+   escaped writes). Before each run, snapshot the live checkout with
+   `git status --porcelain --ignored --untracked-files=all`; after it, take the
+   same snapshot again. Remove only paths that are new in the second snapshot.
+   If a path that already existed changed, do not revert it — stop and tell the
+   user, because it may be their work. Give the runner **only** the input and the instruction to use the
    target skill — never the bar, the smells, the other cases, or why you're
    asking. Done when you hold one artifact per case, each from a context-free
-   run, and the checkout is clean.
+   run, and the after-snapshot of the live checkout matches the before-snapshot.
 
 3. **Grade with a separate judge that applies judgment.** Run the judge in its
    own separate session too — same rule, no shared context. Hand it the
@@ -84,8 +93,9 @@ fuzzy wish.
    has a verdict grounded in the artifact.
 
 4. **Account for nondeterminism.** Agents flicker. A single green is not
-   proof. For any case that matters or any verdict that looks borderline,
-   re-run the blind run 2–3× and report the pass *rate*. A skill that passes
+   proof. Fix the trial count and the pass bar in step 1, before any run:
+   3 blind runs per case, and a case passes only at 3 of 3 unless the user set
+   a different rate up front. Report the rate per case. A skill that passes
    1 of 3 is not fixed.
 
 5. **Diagnose each failure as skill-defect vs bad-case.** A miss means either
@@ -124,9 +134,8 @@ movement legible — this is the evidence the skill actually improved.
 - **Test judgment, not conformance.** The bar is a standard the work must
   clear, never a checklist of the answer. If you find yourself listing the
   exact pieces you expect, you've stopped evaluating the skill.
-- **Isolation is best-effort; the sweep is the guarantee.** Always check the
-  live checkout after a run and clean leaks, no matter how the run was
-  sandboxed.
+- **Isolation is best-effort; the before/after snapshot is the guarantee.**
+  Remove only paths a run added; never revert a path that existed before it.
 - One fresh session per case per run — a new pane or `claude -p` process, never
   an Agent-tool sub-agent — no shared context, so no cross-case learning
   inflates a later case.
