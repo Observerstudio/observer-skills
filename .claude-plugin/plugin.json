@@ -10,6 +10,7 @@
   "keywords": [
     "coordination",
     "code-review",
+    "architecture",
     "release",
     "skills",
     "refactoring"
@@ -21,6 +22,7 @@
     "./skills/writing-pr-bodies",
     "./skills/promoting-a-release",
     "./skills/untangle-codebase",
-    "./skills/untangle-area"
+    "./skills/untangle-area",
+    "./skills/choosing-a-stack"
   ]
 }
