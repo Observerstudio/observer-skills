@@ -82,6 +82,13 @@ Update with `npx skills update`.
 | [**writing-lane-briefs**](skills/writing-lane-briefs/SKILL.md) | You hand work to a lane that will not ask questions. |
 | [**pr-review**](skills/pr-review/SKILL.md) | Before opening a PR (author mode), or to gate one to MERGE or CHANGES (gate mode). |
 | [**writing-pr-bodies**](skills/writing-pr-bodies/SKILL.md) | A lane hands back its PR body. Superseded by `pr` from [mattpocock/skills](https://github.com/mattpocock/skills); kept for older briefs. |
+| [**audit-decisions**](skills/audit-decisions/SKILL.md) | Before merging lane work: list every decision the lane made that its brief did not cover, so the gate reviews decisions, not only the diff. |
+
+### Author a skill
+
+| Skill | Use it when |
+|---|---|
+| [**eval-skills**](skills/eval-skills/SKILL.md) | A skill keeps producing the wrong shape, or you have real input→expected-output cases to test it against. Runs it blind, grades the artifacts, and lets the misses drive the edits. |
 
 ### Ship a release
 

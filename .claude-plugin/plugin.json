@@ -13,7 +13,9 @@
     "architecture",
     "release",
     "skills",
-    "refactoring"
+    "refactoring",
+    "skill-evaluation",
+    "decision-audit"
   ],
   "skills": [
     "./skills/coordinator",
@@ -23,6 +25,8 @@
     "./skills/promoting-a-release",
     "./skills/untangle-codebase",
     "./skills/untangle-area",
-    "./skills/choosing-a-stack"
+    "./skills/choosing-a-stack",
+    "./skills/eval-skills",
+    "./skills/audit-decisions"
   ]
 }
