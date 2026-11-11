@@ -113,11 +113,13 @@ The coordinator pairs with [OCH, the Observer Coordination Hub](https://github.c
 
 1. Create `skills/<name>/SKILL.md`. The frontmatter `name` matches the folder, and the `description` says when to use it.
 2. Add `./skills/<name>` to [`.claude-plugin/plugin.json`](.claude-plugin/plugin.json) and to a grouping in [`skills.sh.json`](skills.sh.json).
-3. Run the check CI runs on every PR:
+3. Run the checks CI runs on every PR:
 
    ```bash
-   npm install --no-save yaml && node scripts/check-skills.mjs
+   npm install --no-save yaml && node scripts/check-skills.mjs && node scripts/check-nda.mjs
    ```
+
+   `check-nda.mjs` fails if a client name returns to any tracked file; it stores only fingerprints, never the names.
 
 <details>
 <summary>Moved from <code>Observerstudio/coordinator</code></summary>
