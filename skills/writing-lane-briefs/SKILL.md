@@ -34,6 +34,9 @@ writes it from scratch.
 - **Scope** names every writer and reader with `file:line`; **does NOT change** names the invariants and the tempting neighbours.
 - **Fixture contract**: seeding file by line range; which rows the nature really needs; the shared-uniqueness helper and what it returns (ours reserves ONE day — dates come from its return value, never hand-picked); slug vs legacy enum; stored sign of any effect quoted from the DB; one actor per test; teardown that survives a failed setup.
 - **Steps** are one action each with the command and the expected output. A correction feature is proved by a SEQUENCE (up-then-down ≠ down-then-up).
+- **Facts (checked live)**: any code that calls an outside system gets each fact it depends on checked against the live system, with the command and date. An unchecked fact is a question for the operator.
+- **How this breaks**: 2–3 hostile inputs you decide before dispatch (the empty case, the stale case, the look-alike neighbour), each a RED-first test. The gate attacks these first; naming them here moves the rework into the brief.
+- **Screen briefs** keep the template's screen checklist; other briefs delete it.
 - **Done criteria** are commands with expected results, never "works correctly".
 - **STOP conditions** name the specific assumptions that, if false, end the lane with LANE-BLOCKED + options.
 - Per-task sentinel `LANE-DONE-<issue> — <branch> <base-sha> (uncommitted) <summary>` (and `LANE-BLOCKED-<issue> — …`), never the bare `LANE-DONE` — the `<issue>` keeps the monitor's grep off the brief's own text. The lane never commits; on `LANE-DONE` the coordinator commits the worktree's output to `<branch>` and gates that new SHA. `LANE-NEEDS-INTEGRATION-SLOT` is a progress marker, not the final line.
@@ -41,6 +44,7 @@ writes it from scratch.
 ## Rework and diagnosis briefs (folded in from superpowers)
 
 - **Rework R1–R3** goes to the same lane in the same worktree with the failing output pasted verbatim and the fix named by file:line. **R4+** goes to a fresh lane on a more capable model — the same lane has stopped seeing it (subagent-driven-development).
+- A rework brief starts with `git pull --ff-only` and `git status --short`: a reworked worktree is often behind its pushed branch, and an unknown change in it is a STOP.
 - A rework brief quotes the reviewer's finding and says: **verify it against the code first; if it is wrong, answer with the evidence, do not implement it** (receiving-code-review). Second-reader claims have been wrong before.
 - A bug brief either **carries the root cause** (file:line, the mechanism, the failing case) or is a **DIAG brief** that forbids any fix and ends with the cause and options (systematic-debugging). Never "find and fix".
 - Every claim in the lane's report is **a pasted command output**, never "should", "seems", "passes locally" (verification-before-completion). The coordinator re-runs the touched files anyway; a claim without output is a LANE-BLOCKED.
@@ -63,12 +67,11 @@ Lanes (OpenCode / Codex panes) read `~/.agents/skills/<name>/SKILL.md` when the 
 
 Never name a skill the lane cannot open — check `ls ~/.agents/skills/<name>` before writing the line.
 
-## Standing rules the brief carries verbatim
+## Standing rules
 
-No subagents. Never `scripts/ci-local*`, the full unit suite, whole-repo tsc, `next build`, or any
-integration file — write them, print `LANE-NEEDS-INTEGRATION-SLOT`. `npx prisma generate` once
-in the worktree. No `git add/commit/push` unless the brief says so; never amend or force-push.
-Ponytail on; `/ponytail-review` on the own diff before reporting. Never `useEffect`. Any new
+The lane's run rules (no subagents, what never to run, no commit) live once, in the template's
+**Worktree + branch** section; copy that section, do not restate it. Add these when the task touches them:
+`npx prisma generate` once in the worktree; never `useEffect`. Any new
 `season_id` relation → season-owned-fact registry. Any `createLedgerEntry` site → ledger-site
 registry AND legacy-wallet-writer inventory. Client value imports from `server/services` that
 reach Prisma break `next build` only — pure helpers stay Prisma-free.
@@ -97,3 +100,6 @@ Monitor on the per-task sentinel excluding your own dispatch text. Idle is not f
 | Sibling-code read | `totalQuantity` vs `quantity` money bug in 4/4 plan tasks (2026-09-15) |
 | Registry line | #1687 and Lane E both CI-red on season registry |
 | Sequence test | one green decrease hid 3 defects incl. live bug #2195 |
+| Facts checked live | a rollback script's `--env staging --apply` would have rolled back production (#4032 R1) |
+| How this breaks | an empty check list read as green; a stale finish line fired a wait (#4129, #4133) |
+| A lane check it can run | 6 reworks in one week were type or test drift only CI saw (#4050, #4069, #4113 R3) |
