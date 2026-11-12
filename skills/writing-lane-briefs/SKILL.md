@@ -71,7 +71,7 @@ Never name a skill the lane cannot open — check `ls ~/.agents/skills/<name>` b
 
 The lane's run rules (no subagents, what never to run, no commit) live once, in the template's
 **Worktree + branch** section; copy that section, do not restate it. Add these when the task touches them:
-`npx prisma generate` once in the worktree; never amend or force-push; never `useEffect`. Any new
+`npx prisma generate` once in the worktree; never `useEffect`. Any new
 `season_id` relation → season-owned-fact registry. Any `createLedgerEntry` site → ledger-site
 registry AND legacy-wallet-writer inventory. Client value imports from `server/services` that
 reach Prisma break `next build` only — pure helpers stay Prisma-free.

@@ -8,7 +8,7 @@ what could go wrong. Becomes the PR body's first section, under this same headin
 
 ## Worktree + branch
 - Worktree: `/abs/path/.worktrees/<name>` on `<branch>` off `origin/<base>` = `<sha>`. node_modules + generated client present; run `npx prisma generate` once.
-- No branch switching, no `git add/commit/push` (coordinator commits). No subagents. Never run: `scripts/ci-local*`, the full unit suite, whole-repo tsc, `next build`, any integration file. Write the integration cases; the coordinator runs them and pastes RED/GREEN.
+- No branch switching, no `git add/commit/push` (coordinator commits); never amend or force-push, even when a brief allows a push. No subagents. Never run: `scripts/ci-local*`, the full unit suite, whole-repo tsc, `next build`, any integration file. The repo's lane check (Delivery) is the one sanctioned exception: run it whole, whatever it runs inside. Write the integration cases; the coordinator runs them and pastes RED/GREEN.
 
 ## Skills to load (read each `~/.agents/skills/<name>/SKILL.md` before starting)
 Routing row: <exact situation from the coordinator's routing table>
@@ -48,7 +48,7 @@ A fact you could not check is a question for the operator, not an assumption in 
 - <hostile input 1: the empty / missing / stale case> → expected: <behaviour>
 - <hostile input 2: the neighbour that looks the same but is not> → expected: <behaviour>
 - <hostile input 3, optional> → expected: <behaviour>
-Expected money or count values are pinned to what today's reader or screen returns, never computed by hand.
+A money or count value the change must NOT move is pinned to what today's reader or screen returns, never computed by hand. A value the change exists to move comes from the recorded decision. If today's value looks wrong by the business rules, STOP and report with file:line.
 
 ## Screen checklist (screen briefs only; delete otherwise)
 - [ ] No bare table: search, filters, date range, sort, pagination, totals, state in the URL — or the brief says which are out and why.
