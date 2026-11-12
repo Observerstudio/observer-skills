@@ -34,7 +34,7 @@ writes it from scratch.
 - **Scope** names every writer and reader with `file:line`; **does NOT change** names the invariants and the tempting neighbours.
 - **Fixture contract**: seeding file by line range; which rows the nature really needs; the shared-uniqueness helper and what it returns (ours reserves ONE day — dates come from its return value, never hand-picked); slug vs legacy enum; stored sign of any effect quoted from the DB; one actor per test; teardown that survives a failed setup.
 - **Steps** are one action each with the command and the expected output. A correction feature is proved by a SEQUENCE (up-then-down ≠ down-then-up).
-- **Facts (checked live)**: any code that calls an outside system gets each fact it depends on checked against the live system, with the command and date. An unchecked fact is a question for the operator.
+- **Facts (checked live)**: any code that calls an outside system gets each fact it depends on checked against the live system with a read-only or dry-run command, quoting the command and date. An unchecked fact is a question for the operator.
 - **How this breaks**: 2–3 hostile inputs you decide before dispatch (the empty case, the stale case, the look-alike neighbour), each a RED-first test. The gate attacks these first; naming them here moves the rework into the brief.
 - **Screen briefs** keep the template's screen checklist; other briefs delete it.
 - **Done criteria** are commands with expected results, never "works correctly".
@@ -71,7 +71,7 @@ Never name a skill the lane cannot open — check `ls ~/.agents/skills/<name>` b
 
 The lane's run rules (no subagents, what never to run, no commit) live once, in the template's
 **Worktree + branch** section; copy that section, do not restate it. Add these when the task touches them:
-`npx prisma generate` once in the worktree; never `useEffect`. Any new
+never `useEffect`. Any new
 `season_id` relation → season-owned-fact registry. Any `createLedgerEntry` site → ledger-site
 registry AND legacy-wallet-writer inventory. Client value imports from `server/services` that
 reach Prisma break `next build` only — pure helpers stay Prisma-free.

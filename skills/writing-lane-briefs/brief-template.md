@@ -8,7 +8,7 @@ what could go wrong. Becomes the PR body's first section, under this same headin
 
 ## Worktree + branch
 - Worktree: `/abs/path/.worktrees/<name>` on `<branch>` off `origin/<base>` = `<sha>`. node_modules + generated client present; run `npx prisma generate` once.
-- No branch switching, no `git add/commit/push` (coordinator commits); never amend or force-push, even when a brief allows a push. No subagents. Never run: `scripts/ci-local*`, the full unit suite, whole-repo tsc, `next build`, any integration file. The repo's lane check (Delivery) is the one sanctioned exception: run it whole, whatever it runs inside. Write the integration cases; the coordinator runs them and pastes RED/GREEN.
+- No branch switching, no `git add/commit/push` (coordinator commits); never amend or force-push, even when a brief allows a push. No subagents. Never run: `scripts/ci-local*`, the full unit suite, whole-repo tsc, `next build`, any integration file. The one sanctioned exception is the repo's lane check named in Delivery (`<lane check command>`): run that command whole; it never licenses running a listed command by hand. Write the integration cases; the coordinator runs them and pastes RED/GREEN.
 
 ## Skills to load (read each `~/.agents/skills/<name>/SKILL.md` before starting)
 Routing row: <exact situation from the coordinator's routing table>
@@ -34,7 +34,7 @@ flowchart LR
 ## Facts (checked live) — required when the code calls an outside system (GitHub, Vercel, a database host, a tracker)
 - <fact the code depends on> — checked with `<command>` on <YYYY-MM-DD>: <what it returned>
 - <e.g. which deploy target a flag really hits; which events still trigger CI; what an API returns while a job waits>
-A fact you could not check is a question for the operator, not an assumption in the brief.
+Check only with read-only or dry-run commands. A fact you could not check that way is a question for the operator; never run a live write to establish it.
 
 ## Scope
 ### A. <slice>
