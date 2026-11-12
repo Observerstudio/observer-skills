@@ -57,7 +57,7 @@ Lanes (OpenCode / Codex panes) read `~/.agents/skills/<name>/SKILL.md` when the 
 | Task shape | Lane loads |
 |---|---|
 | Every brief | `tdd` (red first), `verification-before-completion` (paste output, never "should"), `ponytail-review` (own diff before reporting), `pr` (the lane drafts `PR-BODY-<issue>.md`; the coordinator opens the PR from it) |
-| Implementation or rework brief | `implement` (its red→green loop and closing code-review), with the coordinator's override: no whole-repo typecheck, no full suite, no commit — the coordinator runs those at the gate. Not for a DIAG brief, which forbids any fix. |
+| Implementation or rework brief | `implement` (its red→green loop and closing code-review), with the coordinator's override: no full suite, no commit — the coordinator runs those at the gate. Not for a DIAG brief, which forbids any fix. |
 | Rework brief | `receiving-code-review` (verify the finding before implementing) |
 | DIAG brief | `systematic-debugging` / `diagnosing-bugs` (root cause, no fix) |
 | Prisma query or migration | `prisma-client-api`, `prisma-cli` |
