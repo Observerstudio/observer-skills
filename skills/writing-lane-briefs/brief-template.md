@@ -31,6 +31,11 @@ flowchart LR
 ## Current state (excerpts)
 <Short excerpts with `file:line` so the lane can confirm it is looking at the right code. Drift check: if these do not match the tree, STOP.>
 
+## Facts (checked live) — required when the code calls an outside system (GitHub, Vercel, a database host, a tracker)
+- <fact the code depends on> — checked with `<command>` on <YYYY-MM-DD>: <what it returned>
+- <e.g. which deploy target a flag really hits; which events still trigger CI; what an API returns while a job waits>
+A fact you could not check is a question for the operator, not an assumption in the brief.
+
 ## Scope
 ### A. <slice>
 - <change> (`<file>:<line>`) …
@@ -38,6 +43,18 @@ flowchart LR
 
 ### What does NOT change
 - <invariant / tempting neighbour / out-of-scope file, each with why>
+
+## How this breaks (each becomes a RED-first test)
+- <hostile input 1: the empty / missing / stale case> → expected: <behaviour>
+- <hostile input 2: the neighbour that looks the same but is not> → expected: <behaviour>
+- <hostile input 3, optional> → expected: <behaviour>
+Expected money or count values are pinned to what today's reader or screen returns, never computed by hand.
+
+## Screen checklist (screen briefs only; delete otherwise)
+- [ ] No bare table: search, filters, date range, sort, pagination, totals, state in the URL — or the brief says which are out and why.
+- [ ] Checked at 1366, 1600 and 1920 px: no wrap, no stretched column, no broken alignment.
+- [ ] Loading looks different from empty; empty looks different from zero.
+- [ ] Matches the sibling page's components and order; no `useEffect`.
 
 ## Tests (TDD — RED first, paste RED then GREEN)
 Acceptance: `<abs path>/LANE-ACCEPT-<issue>.feature` — one it() per Scenario, titles VERBATIM.
@@ -61,7 +78,7 @@ Acceptance: `<abs path>/LANE-ACCEPT-<issue>.feature` — one it() per Scenario, 
 Ponytail on. Run `/ponytail-review` on your own diff before reporting; fix what it names or say why not.
 
 ## Delivery
-- eslint on touched files only. tsc only when the coordinator asks.
+- Before the final line, run the repo's lane check if it has one, else its lint command on the touched files; paste the output. Whole-repo typecheck only when the coordinator asks.
 - Print `LANE-NEEDS-INTEGRATION-SLOT` when the integration cases are written (a progress marker, not the end); then exactly one final line:
   `LANE-DONE-<issue> — <branch> <base-sha> (uncommitted) <summary>` or `LANE-BLOCKED-<issue> — <what + options>`.
 - Write the PR body with the `pr` skill to `<abs path>/.worktrees/PR-BODY-<issue>.md`: plain part first, then code, Gate with pasted RED/GREEN, Does NOT change, Ponytail review; `Part of #<issue>`, never `Closes`. The coordinator opens the PR with `--body-file`.
