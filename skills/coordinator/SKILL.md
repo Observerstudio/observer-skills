@@ -108,7 +108,7 @@ for every writer/reader plus explicit do-NOT-change rules; fixture-scoped test p
 (integration files WRITTEN, not run); delivery rules; STOP conditions. If a decision is
 not in the brief, the lane does not make it — reserved decisions come back as
 LANE-BLOCKED with options, and you pick. An **implementation or rework** brief names `implement`
-in its skills line, with the lane override (no whole-repo tsc, no full suite, no commit); see
+in its skills line, with the lane override (no full suite, no commit); see
 "Routing by situation". A DIAG brief forbids any fix and never names `implement`; briefs that
 route through `wayfinder`/`to-spec`/`to-tickets` produce a map, a spec, or tickets, not code, and
 don't carry it either.
@@ -251,8 +251,7 @@ lives only in memory gets skipped under load (it did on 2026-09-27), so check th
 | Every gate | `code-review` (Standards + Spec) + `ponytail-review` + a cold read-only review at the exact SHA. |
 
 **`implement` in a lane (override):** lanes load `implement` for its red→green loop and its closing
-`code-review`, but the brief's standing rules override three of its lines: **no whole-repo typecheck, no full
-test suite, no commit.** The lane ends with `LANE-DONE-<issue> — <branch> <base-sha> (uncommitted)`; the
+`code-review`, but the brief's standing rules override two of its lines: **no full test suite, no commit.** The lane ends with `LANE-DONE-<issue> — <branch> <base-sha> (uncommitted)`; the
 worktree output is still there, just not on the branch. On that sentinel the coordinator, in order: commits
 the worktree's output to `<branch>`, runs the whole gate (cold review + `code-review` + `ponytail-review`,
 CI, tsc, the full suite, the touched integration suite) against the resulting SHA, then pushes and opens the

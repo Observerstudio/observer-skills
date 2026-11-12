@@ -8,11 +8,11 @@ what could go wrong. Becomes the PR body's first section, under this same headin
 
 ## Worktree + branch
 - Worktree: `/abs/path/.worktrees/<name>` on `<branch>` off `origin/<base>` = `<sha>`. node_modules + generated client present; run `npx prisma generate` once.
-- No branch switching, no `git add/commit/push` (coordinator commits); never amend or force-push, even when a brief allows a push. No subagents. Never run: `scripts/ci-local*`, the full unit suite, whole-repo tsc, `next build`, any integration file. The repo's lane check (Delivery) is the one sanctioned exception: run it whole, whatever it runs inside. Write the integration cases; the coordinator runs them and pastes RED/GREEN.
+- No branch switching, no `git add/commit/push` (coordinator commits); never amend or force-push, even when a brief allows a push. No subagents. Never run: `scripts/ci-local*`, the full unit suite, `next build`, any integration file. The one sanctioned exception is the repo's lane check named in Delivery (`<lane check command>`): run that command whole; it never licenses running a listed command by hand. Write the integration cases; the coordinator runs them and pastes RED/GREEN.
 
 ## Skills to load (read each `~/.agents/skills/<name>/SKILL.md` before starting)
 Routing row: <exact situation from the coordinator's routing table>
-Read each `~/.agents/skills/<name>/SKILL.md` before starting: `tdd`, `verification-before-completion`, `ponytail-review`, `pr` — plus the task-shape ones from the skill's toolkit table. An implementation or rework brief also names `implement` (red→green loop + closing code-review), with the override: no whole-repo typecheck, no full suite, no commit — the coordinator runs those at the gate.
+Read each `~/.agents/skills/<name>/SKILL.md` before starting: `tdd`, `verification-before-completion`, `ponytail-review`, `pr` — plus the task-shape ones from the skill's toolkit table. An implementation or rework brief also names `implement` (red→green loop + closing code-review), with the override: no full suite, no commit — the coordinator runs those at the gate.
 
 ## Decision being implemented
 <Who decided, when, in one paragraph. Link the issue comment. This is a REFACTOR / FEATURE / FIX with exactly N behaviour changes: list them.>
@@ -34,7 +34,7 @@ flowchart LR
 ## Facts (checked live) — required when the code calls an outside system (GitHub, Vercel, a database host, a tracker)
 - <fact the code depends on> — checked with `<command>` on <YYYY-MM-DD>: <what it returned>
 - <e.g. which deploy target a flag really hits; which events still trigger CI; what an API returns while a job waits>
-A fact you could not check is a question for the operator, not an assumption in the brief.
+Check only with read-only or dry-run commands. A fact you could not check that way is a question for the operator; never run a live write to establish it.
 
 ## Scope
 ### A. <slice>
@@ -78,7 +78,7 @@ Acceptance: `<abs path>/LANE-ACCEPT-<issue>.feature` — one it() per Scenario, 
 Ponytail on. Run `/ponytail-review` on your own diff before reporting; fix what it names or say why not.
 
 ## Delivery
-- Before the final line, run the repo's lane check if it has one, else its lint command on the touched files; paste the output. Whole-repo typecheck only when the coordinator asks.
+- Before the final line, run `<lane check command>` and paste its output. A repo with no lane check: replace that with `<lint command> <touched files>` and `<typecheck command>`, and drop the typecheck only when the repo marks it slow (the coordinator then runs it at the gate).
 - Print `LANE-NEEDS-INTEGRATION-SLOT` when the integration cases are written (a progress marker, not the end); then exactly one final line:
   `LANE-DONE-<issue> — <branch> <base-sha> (uncommitted) <summary>` or `LANE-BLOCKED-<issue> — <what + options>`.
 - Write the PR body with the `pr` skill to `<abs path>/.worktrees/PR-BODY-<issue>.md`: plain part first, then code, Gate with pasted RED/GREEN, Does NOT change, Ponytail review; `Part of #<issue>`, never `Closes`. The coordinator opens the PR with `--body-file`.
