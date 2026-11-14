@@ -8,11 +8,12 @@
     },
     {
       "title": "Coordination",
-      "description": "Run a whole work track as the coordinator — brief lanes with writing-lane-briefs, have them hand back the PR body with writing-pr-bodies, review with pr-review (author before the PR, gate at the merge), hold the one integration slot.",
+      "description": "Run a whole work track as the coordinator — brief lanes with writing-lane-briefs, have them hand back the PR body with writing-pr-bodies, review with pr-review (author before the PR, gate at the merge) and database-review on schema changes, hold the one integration slot.",
       "skills": [
         "coordinator",
         "writing-lane-briefs",
         "pr-review",
+        "database-review",
         "writing-pr-bodies",
         "audit-decisions",
         "be-ambitious"

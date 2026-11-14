@@ -81,6 +81,7 @@ Update with `npx skills update`.
 | [**coordinator**](skills/coordinator/SKILL.md) | You run a whole track: diagnose, brief lanes, gate PRs, merge. Start at the [onboarding guide](skills/coordinator/docs/onboarding.md). |
 | [**writing-lane-briefs**](skills/writing-lane-briefs/SKILL.md) | You hand work to a lane that will not ask questions. |
 | [**pr-review**](skills/pr-review/SKILL.md) | Before opening a PR (author mode), or to gate one to MERGE or CHANGES (gate mode). |
+| [**database-review**](skills/database-review/SKILL.md) | A PR changes the database schema, or you write a migration. Reviews it like a senior DBA (locks on live tables, data loss, money types, missing constraints, tenant isolation), proves it on a scratch database, ends in PASS or FAIL. Runs on Opus. |
 | [**writing-pr-bodies**](skills/writing-pr-bodies/SKILL.md) | A lane hands back its PR body. Superseded by `pr` from [mattpocock/skills](https://github.com/mattpocock/skills); kept for older briefs. |
 | [**audit-decisions**](skills/audit-decisions/SKILL.md) | Before merging lane work: list every decision the lane made that its brief did not cover, so the gate reviews decisions, not only the diff. |
 | [**be-ambitious**](skills/be-ambitious/SKILL.md) | Before a brief, a diagnosis, a gate plan or any task worth doing well: asks what a top professional would do, the rawest material, the methods, and what outside check proves it right, then rewrites the task to ask for that. From [DannyMac180/skills](https://github.com/DannyMac180/skills) (MIT). |
