@@ -39,4 +39,4 @@ Done when the gate comment is posted with a verdict of MERGE or CHANGES and an A
    - No finding open: MERGE. The coordinator executes it only once every gating check is green; never on pending checks.
 6. Post the comment in the shape of [`gate-comment.md`](gate-comment.md).
 
-Reviewer count and the second-reader rule: [`docs/coordinator-playbook.md`](../docs/coordinator-playbook.md) "The gate". Extras (`security-review`, the `pr-review-toolkit` agents) run only when the repo file names that kind of change.
+Reviewer count and the second-reader rule: [`docs/coordinator-playbook.md`](../docs/coordinator-playbook.md) "The gate". Extras (`security-review`, `database-review`, the `pr-review-toolkit` agents) run only when the repo file names that kind of change; a FAIL from one is a finding.
