@@ -22,7 +22,9 @@ Read the repo's `docs/agents/review-standards.md` first; its database rules win 
 ## Safety
 
 You connect only to a database you started yourself or the repo's documented throwaway test database. Never read a
-URL from `.env*` files. A host other than `localhost` is allowed only when the repo file names it as disposable.
+URL from `.env*` files, and since runners load them on their own, pass the scratch URL explicitly on the command
+and confirm its host before applying. A host other than `localhost` is allowed only when the repo file names it as
+disposable.
 Never stop, restart or reconfigure a server you did not start; stop your own by its data directory
 (`pg_ctl -D <dir> stop`), never with `pkill`/`killall`. Never print or commit credentials.
 
@@ -42,8 +44,8 @@ against every rule below and the report is written.
    history, destructive steps), integrity gaps (missing FKs, uniqueness, checks, cross-tenant references), wrong types
    (money, time zones), locking risks, then performance (missing indexes). Each finding names the file, table and
    column, why it matters, and the exact fix SQL you ran. Report only what you checked against the actual DDL; style
-   preferences are not findings. End on **PASS** (no finding at data-loss, integrity, type or locking severity) or
-   **FAIL**, plus what you ran and its output, and every assumption you made.
+   preferences are not findings. End on **PASS** (every finding is performance-only) or **FAIL**, plus what you ran
+   and its output, and every assumption you made.
 
 ## write (second mode)
 
@@ -200,5 +202,4 @@ Run what you wrote or prescribed before you report:
 - If the [Squawk](https://squawkhq.com) migration linter is available (the `squawk-cli` npm package, at a pinned
   version), lint the migration and fix or justify each finding.
 
-If you cannot start a database here, say so plainly and list what is untested; the verdict is then FAIL until
-someone runs it.
+If you cannot start a database here, say so plainly and list what is untested.
