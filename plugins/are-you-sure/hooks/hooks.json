@@ -1,0 +1,16 @@
+{
+  "description": "Stop hook: before Claude ends a long reply that makes claims or recommendations, stop it once so it can check them. Never loops.",
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}/hooks/are-you-sure.sh\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

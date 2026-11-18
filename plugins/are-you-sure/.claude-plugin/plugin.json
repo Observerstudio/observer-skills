@@ -1,0 +1,17 @@
+{
+  "name": "are-you-sure",
+  "version": "1.0.0",
+  "description": "Before Claude ends a long reply that makes claims or recommendations, stop it once and make it check each claim, look for an earlier decision it would reverse, and end with \"Checked: … · Assumed: …\".",
+  "author": {
+    "name": "Observer studio",
+    "url": "https://github.com/Observerstudio"
+  },
+  "repository": "https://github.com/Observerstudio/observer-skills",
+  "keywords": [
+    "hooks",
+    "stop-hook",
+    "verification",
+    "claims",
+    "reviews"
+  ]
+}
