@@ -66,6 +66,18 @@ Update with `npx skills update`.
 
 </details>
 
+## Are you sure? (opt-in Stop hook)
+
+Before Claude ends a long reply that makes claims or recommendations, this hook stops it once and makes it check each claim, look for an earlier decision it would reverse, and end the reply with `Checked: … · Assumed: …`. Short and status replies are left alone, and it never loops.
+
+It is a separate plugin, off until you install it:
+
+```bash
+/plugin install are-you-sure@observer
+```
+
+Turn it off with `/plugin disable are-you-sure@observer` (or uninstall it). It needs `jq`; without `jq` it does nothing and never blocks a turn.
+
 ## Skills
 
 ### Start a project

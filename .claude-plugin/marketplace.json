@@ -11,6 +11,12 @@
       "source": "./",
       "description": "Coordinate a work track, brief lanes, review and gate PRs, write PR bodies, promote a release, untangle a codebase, choose a stack, audit a lane's decisions, eval a skill blind, deepen a task before starting it.",
       "category": "engineering"
+    },
+    {
+      "name": "are-you-sure",
+      "source": "./plugins/are-you-sure",
+      "description": "Before Claude ends a long reply that makes claims or recommendations, stop it once and make it check them: each claim, any earlier decision it would reverse, and end with \"Checked: … · Assumed: …\". Opt-in.",
+      "category": "engineering"
     }
   ]
 }
