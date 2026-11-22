@@ -12,10 +12,17 @@ The heading is one of: `## ✅ Gate: MERGE · <sha>`, `## ✅ Gate: MERGE · CI 
 | <passed>/<total> pass (N/A <n>) | <k> | <name> | <none\|1> |
 
 ### Findings
-<open defects, each with file:line and the failing scenario; "None.">
+<open defects, most severe first; "None.">
+
+- **[CRITICAL|HIGH|MEDIUM] `file:line` — <one-line defect>**
+  Risk: <what goes wrong, with the failing input or scenario>
+  Fix: <the concrete change>
 
 ### Nits
 <taste, never blocking; "None.">
+
+- **[LOW] `file:line` — <one line>** Fix: <change>
+
 
 ### Checks
 - **Unit:** <what ran, the tail>
@@ -31,6 +38,10 @@ The heading is one of: `## ✅ Gate: MERGE · <sha>`, `## ✅ Gate: MERGE · CI 
 
 </details>
 ````
+
+Severity: **CRITICAL** = money, holdings, custody, data loss, a security hole, or production down; **HIGH** = wrong
+behaviour a user hits; **MEDIUM** = wrong in an edge case, or a missing test for a guard; **LOW** = taste, always a nit.
+Any CRITICAL or HIGH is CHANGES. A MEDIUM is CHANGES unless the gap is stated and accepted here.
 
 `Findings` and `Nits` stay apart: a finding blocks MERGE, a nit never does.
 
