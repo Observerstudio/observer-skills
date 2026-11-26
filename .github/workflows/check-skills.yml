@@ -2,7 +2,9 @@ name: Check skills
 on: [pull_request, push]
 jobs:
   check:
-    runs-on: ubuntu-latest
+    # Self-hosted runner: never run fork PRs (untrusted code) on it.
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ${{ vars.CI_RUNNER || 'observer-mac' }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
